@@ -15,6 +15,7 @@ from cryptography.fernet import Fernet
 from pathlib import Path
 import keyring
 from zxcvbn import zxcvbn
+import pyperclip
 
 # Constants
 VERSION = '1.4.0'
@@ -145,11 +146,12 @@ class Console:
         parser.add_argument('-o', '--open', action='store_true', help='Open text file')
         parser.add_argument('-e', '--encrypt', action='store_true', help='Encrypt text file')
         parser.add_argument('-d', '--decrypt', action='store_true', help='Decrypt text file')
+        parser.add_argument('-c', '--copy', action='store_true', help='Copy generated password to clipboard')
 
         args = parser.parse_args()
 
         if args.generate:
-            self.generate(args.generate, args.length)
+            self.generate(args.generate, args.length, args.copy)
         elif args.wipe:
             self.wipe(args.wipe)
         elif args.open:
@@ -161,9 +163,9 @@ class Console:
         else:
             parser.print_help()
 
-    def generate(self, type: str, length: Optional[int] = None):
+    def generate(self, type: str, length: Optional[int] = None, copy: bool = False):
         if type == 'p':
-            self.generate_password(length)
+            self.generate_password(length, copy)
         elif type == 'k':
             self.generate_key()
 
@@ -173,12 +175,14 @@ class Console:
         elif type == 'k':
             self.wipe_key()
 
-    def generate_password(self, length: Optional[int] = None):
+    def generate_password(self, length: Optional[int] = None, copy: bool = False):
         if length is not None:
             try:
                 password = self.password_generator.generate_password(length)
                 self.file_helper.write_to_file(self.config['passwords_file'], password + '\n\n')
                 print(BOLD + GREEN + '\n[+] Password has been generated successfully')
+                if copy:
+                    self.copy_to_clipboard(password)
                 return
             except ValueError as e:
                 print(BOLD + RED + f'\n[-] ERROR: {str(e)}' + NORMAL)
@@ -194,6 +198,8 @@ class Console:
                 password = self.password_generator.generate_password(user_input_length)
                 self.file_helper.write_to_file(self.config['passwords_file'], password + '\n\n')
                 print(BOLD + GREEN + '\n[+] Password has been generated successfully')
+                if copy:
+                    self.copy_to_clipboard(password)
                 return
             except ValueError as e:
                 print(BOLD + RED + f'\n[-] ERROR: {str(e)}' + NORMAL)
@@ -257,6 +263,13 @@ class Console:
         with open(self.config['passwords_file'], 'wb') as file:
             file.write(content)
         print(BOLD + GREEN + message)
+
+    def copy_to_clipboard(self, text: str):
+        try:
+            pyperclip.copy(text)
+            print(BOLD + GREEN + '\n[+] Password has been copied to clipboard')
+        except Exception as e:
+            print(BOLD + RED + f'\n[-] ERROR: Could not copy to clipboard: {str(e)}' + NORMAL)
 
 def setup_logging():
     logging_config = {

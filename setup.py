@@ -8,7 +8,8 @@ setup(
     install_requires=[
         'cryptography',
         'keyring',
-        'zxcvbn'
+        'zxcvbn',
+        'pyperclip'
     ],
     entry_points={
         'console_scripts': [
