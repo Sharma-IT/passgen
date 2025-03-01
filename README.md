@@ -70,12 +70,12 @@ pip install -e .
 
 After installation, you can use the tool from anywhere by running:
 ```sh
-passgen -g p          # Generate a password interactively
-passgen -g p -l 12    # Generate a 12-character password
-passgen -g p -l 16 -c # Generate a 16-character password and copy to clipboard
-passgen -g p -c       # Generate a password interactively and copy to clipboard
-passgen -g k          # Generate an encryption key
-passgen -h            # Show help
+passgen -g p            # Generate a password interactively
+passgen -g p -l 12      # Generate a 12-character password
+passgen -g p -l 16 -c   # Generate a 16-character password and copy to clipboard
+passgen -g p -c         # Generate a password interactively and copy to clipboard
+passgen -g k            # Generate an encryption key
+passgen -h              # Show help
 ```
 
 ## Usage
