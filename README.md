@@ -24,6 +24,7 @@ Feature-rich and lightweight CLI password generator. This password generator pro
 - Uses Python's `secrets` module for cryptographically secure password generation
 - Does not require admin privileges
 - Automatically logs generated passwords into a text file
+- Copy generated passwords directly to clipboard
 - Generates symmetric cryptographic key to encrypt and decrypt text file
 - Opens text file using the operating system's default text editor
 - Secure key storage using system keyring
@@ -51,6 +52,7 @@ Feature-rich and lightweight CLI password generator. This password generator pro
 - [`cryptography`](https://cryptography.io/en/latest/) -  package which provides cryptographic recipes and primitives to Python developers.
 - [`keyring`](https://pypi.org/project/keyring/) - cross-platform library for secure password and key storage.
 - [`zxcvbn`](https://pypi.org/project/zxcvbn/) - realistic password strength estimation.
+- [`pyperclip`](https://pypi.org/project/pyperclip/) - cross-platform clipboard module for Python.
 
 ## Getting Started
 
@@ -70,6 +72,8 @@ After installation, you can use the tool from anywhere by running:
 ```sh
 passgen -g p          # Generate a password interactively
 passgen -g p -l 12    # Generate a 12-character password
+passgen -g p -l 16 -c # Generate a 16-character password and copy to clipboard
+passgen -g p -c       # Generate a password interactively and copy to clipboard
 passgen -g k          # Generate an encryption key
 passgen -h            # Show help
 ```
@@ -90,6 +94,7 @@ By default, the script stores generated passwords into a text file named `passwo
 | -------- | ----------- |
 | -g p, --generate p | Generate a new password |
 | -l N, --length N | Generate password with length N (optional) |
+| -c, --copy | Copy generated password to clipboard |
 | -g k, --generate k | Generate new encryption key |
 | -w t, --wipe t | Wipe the passwords file |
 | -w k, --wipe k | Wipe the stored encryption key |
